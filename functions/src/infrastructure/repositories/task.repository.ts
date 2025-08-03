@@ -21,7 +21,10 @@ export class TaskRepository implements ITaskRepository {
     }
 
     async findAllByUserId(userId: string): Promise<Task[]> {
-        const snapshot = await this.tasksCollection.where('userId', '==', userId).orderBy('createdAt', 'desc').get();
+        const snapshot = await this.tasksCollection.
+            where('userId', '==', userId).
+            where('isActive', '==', true).
+            orderBy('createdAt', 'desc').get();
         console.log(`Found ${snapshot.size} tasks for user ${userId}`)
         return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Task);
     }

@@ -38,8 +38,14 @@ describe('TaskRepository', () => {
       doc: jest.fn().mockReturnValue(mockDoc)
     };
 
+    const mockQuery = {
+      where: mockWhere,
+      orderBy: mockOrderBy,
+      get: mockGet
+    };
+
     // Chain methods for query
-    mockWhere.mockReturnValue({ orderBy: mockOrderBy });
+    mockWhere.mockReturnValue(mockQuery);
     mockOrderBy.mockReturnValue({ get: mockGet });
 
     (db.collection as jest.Mock).mockReturnValue(mockCollection);
@@ -81,7 +87,6 @@ describe('TaskRepository', () => {
 
   describe('findAllByUserId', () => {
     it('should return all tasks for a user ordered by createdAt desc', async () => {
-      // Arrange
       const userId = 'user123';
       const mockDocs = [
         { id: 'task1', data: () => ({ title: 'Task 1', userId }) },
@@ -93,11 +98,10 @@ describe('TaskRepository', () => {
       };
       mockGet.mockResolvedValue(mockSnapshot);
 
-      // Act
       const result = await taskRepository.findAllByUserId(userId);
 
-      // Assert
-      expect(mockWhere).toHaveBeenCalledWith('userId', '==', userId);
+      expect(mockWhere).toHaveBeenNthCalledWith(1, 'userId', '==', userId);
+      expect(mockWhere).toHaveBeenNthCalledWith(2, 'isActive', '==', true);
       expect(mockOrderBy).toHaveBeenCalledWith('createdAt', 'desc');
       expect(result).toHaveLength(2);
       expect(result[0].id).toBe('task1');
