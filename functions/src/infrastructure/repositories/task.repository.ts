@@ -22,22 +22,30 @@ export class TaskRepository implements ITaskRepository {
 
     async findAllByUserId(userId: string): Promise<Task[]> {
         const snapshot = await this.tasksCollection.where('userId', '==', userId).orderBy('createdAt', 'desc').get();
+        console.log(`Found ${snapshot.size} tasks for user ${userId}`)
         return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Task);
     }
 
     async update(taskId: string, task: Partial<Task>): Promise<Task> {
         const ref = this.tasksCollection.doc(taskId);
-        await ref.update({ ...task, updatedAt: new Date() });
+        const { title, description } = task;
+        console.log('Updating task with ID repository:', taskId, 'with data:', { title, description });
+
+        await ref.update({ title, description, updatedAt: new Date() });
         const doc = await ref.get();
         return { id: doc.id, ...doc.data() } as Task;
     }
 
     async delete(taskId: string): Promise<void> {
-        await this.tasksCollection.doc(taskId).delete();
+        const ref = this.tasksCollection.doc(taskId);
+        console.log('Deleting task with ID:', taskId);
+        await ref.update({ isActive: false, updatedAt: new Date() });
+        console.log('Task deleted (soft delete) with ID:', taskId);
     }
 
     async complete(taskId: string): Promise<void> {
         const ref = this.tasksCollection.doc(taskId);
+        console.log('Completing task with ID:', taskId);
         await ref.update({ isCompleted: true, updatedAt: new Date() });
     }
 }

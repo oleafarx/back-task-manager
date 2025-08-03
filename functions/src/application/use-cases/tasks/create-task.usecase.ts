@@ -1,5 +1,5 @@
-import { Task } from "../../domain/entities/task.entity";
-import { ITaskRepository } from "../../domain/repositories/ITask.repository";
+import { Task } from "../../../domain/entities/task.entity";
+import { ITaskRepository } from "../../../domain/repositories/ITask.repository";
 
 export class CreateTaskUseCase {
     constructor(private taskRepository: ITaskRepository) {}
