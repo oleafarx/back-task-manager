@@ -4,6 +4,7 @@ import { CreateUserUseCase } from '../../../../application/use-cases/users/creat
 import { GetUserUseCase } from '../../../../application/use-cases/users/get-user.usecase';
 import { Message } from '../../../../utils/contants';
 import { getErrorMessage } from '../../../../utils/getErrorMessage';
+import { log } from 'firebase-functions/logger';
 
 const repository = new UserRepository();
 const createUserUseCase = new CreateUserUseCase(repository);
@@ -11,7 +12,7 @@ const getUserUseCase = new GetUserUseCase(repository);
 
 export const createUserController = async (req: Request, res: Response) => {
     try {
-        console.log('Received request to create user:', req.body);
+        log('Received request to create user:', req.body);
         const { email } = req.body;
         const user = await createUserUseCase.execute(email);
         return res.status(201).json(Message._201_CREATED(user));
@@ -27,13 +28,11 @@ export const createUserController = async (req: Request, res: Response) => {
 export const getUserController = async (req: Request, res: Response) => {
     try {
         const email = req.params.email;
-        console.log('Received request to get user with email:', email);
+        log('Received request to get user with email:', email);
         const user = await getUserUseCase.execute(email);
-        console.log('User fetched:', user);
         return res.status(200).json(Message._200_OPERATION_SUCCESSFUL(user));
     } catch (error) {
         const errorMessage = getErrorMessage(error);
-        console.error('Error fetching user:', errorMessage);
         if (errorMessage.includes('not found')) {
             return res.status(404).json(Message._404_NOT_FOUND(errorMessage));
         }

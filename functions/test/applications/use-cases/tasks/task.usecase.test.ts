@@ -6,7 +6,6 @@ import { UpdateTaskUseCase } from '@/application/use-cases/tasks/update-task.use
 import { Task } from '@/domain/entities/task.entity';
 import { ITaskRepository } from '@/domain/repositories/ITask.repository';
 
-// Mock del repositorio
 const mockTaskRepository: jest.Mocked<ITaskRepository> = {
   create: jest.fn(),
   findAllByUserId: jest.fn(),
@@ -18,8 +17,6 @@ const mockTaskRepository: jest.Mocked<ITaskRepository> = {
 describe('Task Use Cases', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Mock console.log to avoid test output noise
-    jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   describe('CompleteTaskUseCase', () => {

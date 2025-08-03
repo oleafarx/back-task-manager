@@ -2,7 +2,6 @@ import { TaskRepository } from '@/infrastructure/repositories/task.repository';
 import { Task } from '@/domain/entities/task.entity';
 import { db } from '@/infrastructure/firebase/firestore';
 
-// Mock de Firestore
 jest.mock('@/infrastructure/firebase/firestore', () => ({
   db: {
     collection: jest.fn()
@@ -20,7 +19,6 @@ describe('TaskRepository', () => {
   let mockUpdate: jest.Mock<any>;
 
   beforeEach(() => {
-    // Setup mocks
     mockAdd = jest.fn();
     mockWhere = jest.fn();
     mockOrderBy = jest.fn();
@@ -44,16 +42,12 @@ describe('TaskRepository', () => {
       get: mockGet
     };
 
-    // Chain methods for query
     mockWhere.mockReturnValue(mockQuery);
     mockOrderBy.mockReturnValue({ get: mockGet });
 
     (db.collection as jest.Mock).mockReturnValue(mockCollection);
 
     taskRepository = new TaskRepository();
-
-    // Mock console.log to avoid test output noise
-    jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -62,15 +56,12 @@ describe('TaskRepository', () => {
 
   describe('create', () => {
     it('should create a task and return it with generated ID', async () => {
-      // Arrange
       const task = new Task('user123', 'Test Task', 'Test Description');
       const mockDocRef = { id: 'generated-id-123' };
       mockAdd.mockResolvedValue(mockDocRef);
 
-      // Act
       const result = await taskRepository.create(task);
 
-      // Assert
       expect(mockAdd).toHaveBeenCalledWith({
         userId: task.userId,
         title: task.title,
@@ -111,7 +102,6 @@ describe('TaskRepository', () => {
 
   describe('update', () => {
     it('should update task title and description', async () => {
-      // Arrange
       const taskId = 'task123';
       const updateData = { title: 'Updated Title', description: 'Updated Description' };
       const mockDocData = { title: 'Updated Title', description: 'Updated Description' };
@@ -123,10 +113,8 @@ describe('TaskRepository', () => {
       mockUpdate.mockResolvedValue(null);
       mockGet.mockResolvedValue(mockDocSnapshot);
 
-      // Act
       const result = await taskRepository.update(taskId, updateData);
 
-      // Assert
       expect(mockCollection.doc).toHaveBeenCalledWith(taskId);
       expect(mockUpdate).toHaveBeenCalledWith({
         title: updateData.title,
@@ -141,14 +129,11 @@ describe('TaskRepository', () => {
 
   describe('delete', () => {
     it('should perform soft delete by setting isActive to false', async () => {
-      // Arrange
       const taskId = 'task123';
       mockUpdate.mockResolvedValue(undefined);
 
-      // Act
       await taskRepository.delete(taskId);
 
-      // Assert
       expect(mockCollection.doc).toHaveBeenCalledWith(taskId);
       expect(mockUpdate).toHaveBeenCalledWith({
         isActive: false,
@@ -159,14 +144,11 @@ describe('TaskRepository', () => {
 
   describe('complete', () => {
     it('should mark task as completed', async () => {
-      // Arrange
       const taskId = 'task123';
       mockUpdate.mockResolvedValue(undefined);
 
-      // Act
       await taskRepository.complete(taskId);
 
-      // Assert
       expect(mockCollection.doc).toHaveBeenCalledWith(taskId);
       expect(mockUpdate).toHaveBeenCalledWith({
         isCompleted: true,

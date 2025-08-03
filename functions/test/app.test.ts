@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import app from '@/app';
 
-// Mock de los routers
 jest.mock('@/interfaces/http/express/routes/task.routes', () => {
   const router = express.Router();
   router.get('/test', (req, res) => res.json({ message: 'task router works' }));
@@ -18,7 +17,6 @@ jest.mock('@/interfaces/http/express/routes/user.routes', () => {
 
 describe('App Configuration', () => {
   test('should have CORS enabled with origin: true', async () => {
-    // Verificar que CORS está configurado correctamente
     const response = await request(app)
       .options('/tasks/test')
       .set('Origin', 'http://localhost:3000')
@@ -28,7 +26,6 @@ describe('App Configuration', () => {
   });
 
   test('should parse JSON bodies', async () => {
-    // Crear un endpoint temporal para probar el parsing de JSON
     const testApp = express();
     testApp.use(cors({ origin: true }));
     testApp.use(express.json());

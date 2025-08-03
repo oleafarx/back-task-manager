@@ -2,7 +2,6 @@ import { UserRepository } from '@/infrastructure/repositories/user.repository';
 import { User } from '@/domain/entities/user.entity';
 import { db } from '@/infrastructure/firebase/firestore';
 
-// Mock de Firestore
 jest.mock('@/infrastructure/firebase/firestore', () => ({
   db: {
     collection: jest.fn()
@@ -17,7 +16,6 @@ describe('UserRepository', () => {
   let mockGet: jest.Mock;
 
   beforeEach(() => {
-    // Setup mocks
     mockAdd = jest.fn();
     mockWhere = jest.fn();
     mockGet = jest.fn();
@@ -27,15 +25,12 @@ describe('UserRepository', () => {
       where: mockWhere
     };
 
-    // Chain methods for query
     mockWhere.mockReturnValue({ get: mockGet });
 
     (db.collection as jest.Mock).mockReturnValue(mockCollection);
 
     userRepository = new UserRepository();
 
-    // Mock console.log to avoid test output noise
-    jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -44,7 +39,6 @@ describe('UserRepository', () => {
 
   describe('create', () => {
     it('should create a user when email does not exist', async () => {
-      // Arrange
       const user = new User('test@example.com');
       const mockDocRef = { id: 'generated-id-123' };
       const emptySnapshot = { empty: true };
@@ -52,10 +46,8 @@ describe('UserRepository', () => {
       mockGet.mockResolvedValue(emptySnapshot);
       mockAdd.mockResolvedValue(mockDocRef);
 
-      // Act
       const result = await userRepository.create(user);
 
-      // Assert
       expect(mockWhere).toHaveBeenCalledWith('email', '==', user.email);
       expect(mockGet).toHaveBeenCalled();
       expect(mockAdd).toHaveBeenCalledWith({
@@ -67,13 +59,11 @@ describe('UserRepository', () => {
     });
 
     it('should throw error when user with email already exists', async () => {
-      // Arrange
       const user = new User('existing@example.com');
       const existingSnapshot = { empty: false };
       
       mockGet.mockResolvedValue(existingSnapshot);
 
-      // Act & Assert
       await expect(userRepository.create(user)).rejects.toThrow(
         'User with existing@example.com already exists.'
       );
@@ -86,7 +76,6 @@ describe('UserRepository', () => {
 
   describe('findByEmail', () => {
     it('should return user when found by email', async () => {
-      // Arrange
       const email = 'test@example.com';
       const mockDoc = {
         id: 'user123',
@@ -100,10 +89,8 @@ describe('UserRepository', () => {
       
       mockGet.mockResolvedValue(mockSnapshot);
 
-      // Act
       const result = await userRepository.findByEmail(email);
 
-      // Assert
       expect(mockWhere).toHaveBeenCalledWith('email', '==', email);
       expect(mockGet).toHaveBeenCalled();
       expect(result).not.toBeNull();
@@ -112,7 +99,6 @@ describe('UserRepository', () => {
     });
 
     it('should return null when user not found by email', async () => {
-      // Arrange
       const email = 'notfound@example.com';
       const emptySnapshot = {
         size: 0,
@@ -122,17 +108,14 @@ describe('UserRepository', () => {
       
       mockGet.mockResolvedValue(emptySnapshot);
 
-      // Act
       const result = await userRepository.findByEmail(email);
 
-      // Assert
       expect(mockWhere).toHaveBeenCalledWith('email', '==', email);
       expect(mockGet).toHaveBeenCalled();
       expect(result).toBeNull();
     });
 
     it('should return first user when multiple users found (edge case)', async () => {
-      // Arrange
       const email = 'test@example.com';
       const mockDoc1 = {
         id: 'user123',
@@ -150,14 +133,12 @@ describe('UserRepository', () => {
       
       mockGet.mockResolvedValue(mockSnapshot);
 
-      // Act
       const result = await userRepository.findByEmail(email);
 
-      // Assert
       expect(mockWhere).toHaveBeenCalledWith('email', '==', email);
       expect(mockGet).toHaveBeenCalled();
       expect(result).not.toBeNull();
-      expect(result?.id).toBe('user123'); // Should return first user
+      expect(result?.id).toBe('user123');
       expect(result?.email).toBe(email);
     });
   });

@@ -1,14 +1,12 @@
 import * as functions from 'firebase-functions';
 import app from '@/app';
 
-// Mock firebase-functions
 jest.mock('firebase-functions', () => ({
     https: {
         onRequest: jest.fn()
     }
 }));
 
-// Mock app
 jest.mock('@/app');
 
 describe('Firebase Functions Index', () => {
@@ -20,7 +18,6 @@ describe('Firebase Functions Index', () => {
         const mockOnRequest = jest.fn().mockReturnValue('firebase-function');
         (functions.https.onRequest as jest.Mock) = mockOnRequest;
 
-        // Re-import to trigger function creation
         const indexModule = require('@/index');
 
         expect(functions.https.onRequest).toHaveBeenCalledWith(app);

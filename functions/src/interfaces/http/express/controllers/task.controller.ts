@@ -7,6 +7,7 @@ import { DeleteTaskUseCase } from '../../../../application/use-cases/tasks/delet
 import { CompleteTaskUseCase } from '../../../../application/use-cases/tasks/complete-task.usecase';
 import { Message, Constants } from '../../../../utils/contants';
 import { getErrorMessage } from '../../../../utils/getErrorMessage';
+import { log } from 'firebase-functions/logger';
 
 const repository = new TaskRepository();
 const createTaskUseCase = new CreateTaskUseCase(repository);
@@ -17,10 +18,9 @@ const completeTaskUseCase = new CompleteTaskUseCase(repository);
 
 export const createTaskController = async (req: Request, res: Response) => {
     try {
-        console.log('Received request to create task:', req.body);
+        log('Received request to create task:', req.body);
         const { userId, title, description = '' } = req.body;
         const task = await createTaskUseCase.execute(userId, title, description);
-        console.log('Task created successfully:', task);
         res.status(201).json(Message._201_CREATED(task));
     } catch (error) {
         const errorMessage = getErrorMessage(error);
@@ -31,7 +31,7 @@ export const createTaskController = async (req: Request, res: Response) => {
 export const getTasksByUserController = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
-        console.log('Received request to get tasks for user:', userId);
+        log('Received request to get tasks for user:', userId);
         const tasks = await getTasksByUserUseCase.execute(userId);
         if (tasks.length === 0) {
             return res.status(404).json(Message._404_NOT_FOUND(Constants.TASK_NOT_FOUND));
@@ -48,7 +48,7 @@ export const updateTaskController = async (req: Request, res: Response) => {
     try {
         const taskId = req.params.taskId;
         const { title, description } = req.body;
-        console.log('Received request to update task:', { taskId, title, description });
+        log('Received request to update task:', { taskId, title, description });
         const updatedTask = await updateTaskUseCase.execute(taskId, title, description);
         res.status(200).json(Message._200_OPERATION_SUCCESSFUL(updatedTask));
     } catch (error) {
@@ -60,7 +60,7 @@ export const updateTaskController = async (req: Request, res: Response) => {
 export const deleteTaskController = async (req: Request, res: Response) => {
     try {
         const taskId = req.params.taskId;
-        console.log('Received request to delete task with ID:', taskId);
+        log('Received request to delete task with ID:', taskId);
         await deleteTaskUseCase.execute(taskId);
         res.status(204).json(Message._204_NO_CONTENT());
     } catch (error) {
@@ -72,7 +72,7 @@ export const deleteTaskController = async (req: Request, res: Response) => {
 export const completeTaskController = async (req: Request, res: Response) => {
     try {
         const taskId = req.params.taskId;
-        console.log('Received request to complete task with ID:', taskId);
+        log('Received request to complete task with ID:', taskId);
         await completeTaskUseCase.execute(taskId);
         res.status(200).json(Message._200_OPERATION_SUCCESSFUL({}, Constants.TASK_COMPLETED));
     } catch (error) {

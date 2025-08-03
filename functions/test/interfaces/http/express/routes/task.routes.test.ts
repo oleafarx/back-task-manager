@@ -16,7 +16,6 @@ jest.mock('express', () => ({
     }))
 }));
 
-// Mock controllers
 jest.mock('@/interfaces/http/express/controllers/task.controller', () => ({
     createTaskController: jest.fn(),
     getTasksByUserController: jest.fn(),
