@@ -5,6 +5,8 @@ import { GetTasksByUserUseCase } from '../../../../application/use-cases/tasks/g
 import { UpdateTaskUseCase } from '../../../../application/use-cases/tasks/update-task.usecase';
 import { DeleteTaskUseCase } from '../../../../application/use-cases/tasks/delete-task.usecase';
 import { CompleteTaskUseCase } from '../../../../application/use-cases/tasks/complete-task.usecase';
+import { Message, Constants } from '../../../../utils/contants';
+import { getErrorMessage } from '../../../../utils/getErrorMessage';
 
 const repository = new TaskRepository();
 const createTaskUseCase = new CreateTaskUseCase(repository);
@@ -18,10 +20,10 @@ export const createTaskController = async (req: Request, res: Response) => {
         console.log('Received request to create task:', req.body);
         const { userId, title, description = '' } = req.body;
         const task = await createTaskUseCase.execute(userId, title, description);
-        res.status(200).json(task);
+        res.status(200).json(Message._201_CREATED(task));
     } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        res.status(500).json({ message: 'Error creating task', error: errorMessage });
+        const errorMessage = getErrorMessage(error);
+        res.status(500).json(Message._500_INTERNAL_SERVER_ERROR(errorMessage));
     }
 }
 
@@ -31,12 +33,13 @@ export const getTasksByUserController = async (req: Request, res: Response) => {
         console.log('Received request to get tasks for user:', userId);
         const tasks = await getTasksByUserUseCase.execute(userId);
         if (tasks.length === 0) {
-            return res.status(404).json({ message: 'No tasks found for this user' });
+            return res.status(404).json(Message._404_NOT_FOUND(Constants.TASK_NOT_FOUND));
         }
         return res.status(200).json(tasks);
     } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        return res.status(500).json({ message: 'Error fetching tasks', error: errorMessage });
+        const errorMessage = getErrorMessage(error);
+        return res.status(500).json(Message._500_INTERNAL_SERVER_ERROR(errorMessage));
+
     }
 }
 
@@ -46,10 +49,10 @@ export const updateTaskController = async (req: Request, res: Response) => {
         const { title, description } = req.body;
         console.log('Received request to update task:', { taskId, title, description });
         const updatedTask = await updateTaskUseCase.execute(taskId, title, description);
-        res.status(200).json(updatedTask);
+        res.status(200).json(Message._200_OPERATION_SUCCESSFUL(updatedTask));
     } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        res.status(500).json({ message: 'Error updating task', error: errorMessage });
+        const errorMessage = getErrorMessage(error);
+        res.status(500).json(Message._500_INTERNAL_SERVER_ERROR(errorMessage));
     }
 }
 
@@ -58,10 +61,10 @@ export const deleteTaskController = async (req: Request, res: Response) => {
         const taskId = req.params.taskId;
         console.log('Received request to delete task with ID:', taskId);
         await deleteTaskUseCase.execute(taskId);
-        res.status(204).send();
+        res.status(204).json(Message._204_NO_CONTENT());
     } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        res.status(500).json({ message: 'Error deleting task', error: errorMessage });
+        const errorMessage = getErrorMessage(error);
+        res.status(500).json(Message._500_INTERNAL_SERVER_ERROR(errorMessage));
     }
 }   
 
@@ -70,9 +73,9 @@ export const completeTaskController = async (req: Request, res: Response) => {
         const taskId = req.params.taskId;
         console.log('Received request to complete task with ID:', taskId);
         await completeTaskUseCase.execute(taskId);
-        res.status(200).json({ message: 'Task completed successfully' });
+        res.status(200).json(Message._200_OPERATION_SUCCESSFUL(Constants.TASK_COMPLETED));
     } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        res.status(500).json({ message: 'Error completing task', error: errorMessage });
+        const errorMessage = getErrorMessage(error);
+        res.status(500).json(Message._500_INTERNAL_SERVER_ERROR(errorMessage));
     }
 }   
