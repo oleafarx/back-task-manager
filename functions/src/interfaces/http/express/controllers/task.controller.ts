@@ -20,7 +20,7 @@ export const createTaskController = async (req: Request, res: Response) => {
         console.log('Received request to create task:', req.body);
         const { userId, title, description = '' } = req.body;
         const task = await createTaskUseCase.execute(userId, title, description);
-        res.status(200).json(Message._201_CREATED(task));
+        res.status(201).json(Message._201_CREATED(task));
     } catch (error) {
         const errorMessage = getErrorMessage(error);
         res.status(500).json(Message._500_INTERNAL_SERVER_ERROR(errorMessage));

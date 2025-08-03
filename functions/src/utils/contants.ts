@@ -17,6 +17,10 @@ export const Message = {
         status: 404,
         message: message || "Resource not found",
     }),
+    _409_CONFLICT: (message: string) => ({
+        status: 409,                
+        message: message || "Conflict",
+    }),
     _500_INTERNAL_SERVER_ERROR: (message: string) => ({
         status: 500,
         message: "Internal server error",
