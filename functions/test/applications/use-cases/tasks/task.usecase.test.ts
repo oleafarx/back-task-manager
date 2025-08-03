@@ -30,14 +30,11 @@ describe('Task Use Cases', () => {
     });
 
     it('should complete a task by calling repository complete method', async () => {
-      // Arrange
       const taskId = 'task123';
       mockTaskRepository.complete.mockResolvedValue(undefined);
 
-      // Act
       await completeTaskUseCase.execute(taskId);
 
-      // Assert
       expect(mockTaskRepository.complete).toHaveBeenCalledWith(taskId);
     });
   });
@@ -50,19 +47,15 @@ describe('Task Use Cases', () => {
     });
 
     it('should create a task with userId, title and description', async () => {
-      // Arrange
       const userId = 'user123';
       const title = 'Test Task';
       const description = 'Test Description';
-      // Assuming Task constructor accepts isCompleted as an optional parameter
       const expectedTask = new Task(userId, title, description);
       
       mockTaskRepository.create.mockResolvedValue(expectedTask);
 
-      // Act
       const result = await createTaskUseCase.execute(userId, title, description);
 
-      // Assert
       expect(mockTaskRepository.create).toHaveBeenCalledWith(expect.objectContaining({
         userId,
         title,
@@ -72,18 +65,14 @@ describe('Task Use Cases', () => {
     });
 
     it('should create a task with default empty description when not provided', async () => {
-      // Arrange
       const userId = 'user123';
       const title = 'Test Task';
-      // Assuming Task constructor accepts isCompleted as an optional parameter
       const expectedTask = new Task(userId, title, '');
       
       mockTaskRepository.create.mockResolvedValue(expectedTask);
 
-      // Act
       const result = await createTaskUseCase.execute(userId, title);
 
-      // Assert
       expect(mockTaskRepository.create).toHaveBeenCalledWith(expect.objectContaining({
         userId,
         title,
@@ -101,14 +90,11 @@ describe('Task Use Cases', () => {
     });
 
     it('should delete a task by calling repository delete method', async () => {
-      // Arrange
       const taskId = 'task123';
       mockTaskRepository.delete.mockResolvedValue(undefined);
 
-      // Act
       await deleteTaskUseCase.execute(taskId);
 
-      // Assert
       expect(mockTaskRepository.delete).toHaveBeenCalledWith(taskId);
     });
   });
@@ -121,7 +107,6 @@ describe('Task Use Cases', () => {
     });
 
     it('should get all tasks for a user', async () => {
-      // Arrange
       const userId = 'user123';
       const expectedTasks = [
         new Task(userId, 'Task 1', 'Description 1'),
@@ -130,10 +115,8 @@ describe('Task Use Cases', () => {
       
       mockTaskRepository.findAllByUserId.mockResolvedValue(expectedTasks);
 
-      // Act
       const result = await getTasksByUserUseCase.execute(userId);
 
-      // Assert
       expect(mockTaskRepository.findAllByUserId).toHaveBeenCalledWith(userId);
       expect(result).toEqual(expectedTasks);
     });
@@ -147,19 +130,15 @@ describe('Task Use Cases', () => {
     });
 
     it('should update a task with new title and description', async () => {
-      // Arrange
       const taskId = 'task123';
       const title = 'Updated Title';
       const description = 'Updated Description';
-      // Assuming Task constructor accepts isCompleted as an optional parameter
       const updatedTask = new Task('user123', title, description);
       
       mockTaskRepository.update.mockResolvedValue(updatedTask);
 
-      // Act
       const result = await updateTaskUseCase.execute(taskId, title, description);
 
-      // Assert
       expect(mockTaskRepository.update).toHaveBeenCalledWith(taskId, expect.objectContaining({
         userId: '',
         title,

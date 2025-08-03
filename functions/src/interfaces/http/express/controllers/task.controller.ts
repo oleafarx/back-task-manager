@@ -24,7 +24,6 @@ export const createTaskController = async (req: Request, res: Response) => {
         res.status(201).json(Message._201_CREATED(task));
     } catch (error) {
         const errorMessage = getErrorMessage(error);
-        console.error('Error creating task:', errorMessage);
         res.status(500).json(Message._500_INTERNAL_SERVER_ERROR(errorMessage));
     }
 }

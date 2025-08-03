@@ -9,9 +9,9 @@ export const Message = {
         message: "Resource created successfully",
         data
     }),
-    _204_NO_CONTENT: (message?: string) => ({
+    _204_NO_CONTENT: () => ({
         status: 204,
-        message: "No content",
+        message: "Operation successful, no content",
     }),
     _404_NOT_FOUND: (message: string) => ({
         status: 404,
