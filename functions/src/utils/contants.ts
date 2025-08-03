@@ -9,7 +9,7 @@ export const Message = {
         message: "Resource created successfully",
         data
     }),
-    _204_NO_CONTENT: () => ({
+    _204_NO_CONTENT: (message?: string) => ({
         status: 204,
         message: "No content",
     }),
@@ -29,7 +29,7 @@ export const Message = {
 }
 
 export const Constants = {
-    TASK_NOT_FOUND: "Task not found",
+    TASK_NOT_FOUND: "No tasks found for this user",
     USER_NOT_FOUND: "User not found",
     INVALID_TASK_ID: "Invalid task ID",
     TASK_COMPLETED: "Task completed successfully",

@@ -9,7 +9,5 @@ export class User implements IUser {
         public email: string,
         public createdAt: Date = new Date(),
         public readonly id?: string
-    ) {
-        console.log('User entity created with email:', email);
-    }
+    ) {}
 }
