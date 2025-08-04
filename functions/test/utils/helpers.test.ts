@@ -1,4 +1,4 @@
-import { getErrorMessage } from '@/utils/getErrorMessage';
+import { getErrorMessage } from '@/utils/helpers';
 
 describe('getErrorMessage', () => {
     it('should return error message when error is instance of Error', () => {

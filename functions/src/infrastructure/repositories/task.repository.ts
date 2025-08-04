@@ -2,6 +2,7 @@ import { db } from "../firebase/firestore";
 import { Task } from "../../domain/entities/task.entity";
 import { ITaskRepository } from "../../domain/repositories/ITask.repository";
 import { log } from "firebase-functions/logger";
+import { convertDate } from "../../utils/helpers"
 
 export class TaskRepository implements ITaskRepository {
     private tasksCollection = db.collection("tasks");
@@ -25,8 +26,16 @@ export class TaskRepository implements ITaskRepository {
             where('userId', '==', userId).
             where('isActive', '==', true).
             orderBy('createdAt', 'desc').get();
-        log(`Found ${snapshot.size} tasks for user ${userId}`)
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Task);
+        log(`Found ${snapshot.size} tasks for ${userId}`);
+        return snapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+                createdAt: new Date(convertDate(data.createdAt._seconds, data.createdAt._nanoseconds)),
+                updatedAt: new Date(convertDate(data.updatedAt._seconds, data.updatedAt._nanoseconds)),
+            } as Task;
+        });
     }
 
     async update(taskId: string, task: Partial<Task>): Promise<Task> {

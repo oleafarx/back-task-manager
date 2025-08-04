@@ -3,7 +3,7 @@ import { UserRepository } from '../../../../infrastructure/repositories/user.rep
 import { CreateUserUseCase } from '../../../../application/use-cases/users/create-user.usecase';
 import { GetUserUseCase } from '../../../../application/use-cases/users/get-user.usecase';
 import { Message } from '../../../../utils/contants';
-import { getErrorMessage } from '../../../../utils/getErrorMessage';
+import { getErrorMessage } from '../../../../utils/helpers';
 import { log } from 'firebase-functions/logger';
 
 const repository = new UserRepository();

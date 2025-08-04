@@ -6,7 +6,7 @@ import { UpdateTaskUseCase } from '../../../../application/use-cases/tasks/updat
 import { DeleteTaskUseCase } from '../../../../application/use-cases/tasks/delete-task.usecase';
 import { CompleteTaskUseCase } from '../../../../application/use-cases/tasks/complete-task.usecase';
 import { Message, Constants } from '../../../../utils/contants';
-import { getErrorMessage } from '../../../../utils/getErrorMessage';
+import { getErrorMessage } from '../../../../utils/helpers';
 import { log } from 'firebase-functions/logger';
 
 const repository = new TaskRepository();
