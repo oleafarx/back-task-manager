@@ -1,4 +1,5 @@
 require("dotenv").config();
+import * as functions from 'firebase-functions';
 
 export const Message = {
     _200_OPERATION_SUCCESSFUL: (data?: any, message?: string) => ({
@@ -46,6 +47,6 @@ export const Constants = {
 }
 
 export abstract class ParameterStore {
-    static readonly accessTokenSecret = process.env.JWT_ACCESS_SECRET || 'your-secret-key';
-    static readonly refreshTokenSecret = process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key';
+    static readonly accessTokenSecret = process.env.JWT_ACCESS_SECRET || functions.config().jwt.access_secret || 'your-secret-key';
+    static readonly refreshTokenSecret = process.env.JWT_REFRESH_SECRET || functions.config().jwt.refresh_secret || 'your-refresh-secret-key';
 }

@@ -8,6 +8,9 @@ export class AuthService {
     private readonly refreshTokenSecret: string;
 
     constructor() {
+        if (!ParameterStore.accessTokenSecret || !ParameterStore.refreshTokenSecret) {
+            throw new Error('Missing JWT secrets in environment or Firebase config.');
+        }
         this.accessTokenSecret = ParameterStore.accessTokenSecret,
         this.refreshTokenSecret = ParameterStore.accessTokenSecret
     }
