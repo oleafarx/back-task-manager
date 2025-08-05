@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 export const Message = {
     _200_OPERATION_SUCCESSFUL: (data?: any, message?: string) => ({
         status: 200,
@@ -12,6 +14,14 @@ export const Message = {
     _204_NO_CONTENT: () => ({
         status: 204,
         message: "Operation successful, no content",
+    }),
+    _400_BAD_REQUEST: (message: string) => ({
+        status: 400,
+        message: message || 'Bad request'
+    }),
+    _401_UNAUTHORIZED: (message: string) => ({
+        status: 401,
+        message: message || 'Not authorized'
     }),
     _404_NOT_FOUND: (message: string) => ({
         status: 404,
@@ -33,4 +43,9 @@ export const Constants = {
     USER_NOT_FOUND: "User not found",
     INVALID_TASK_ID: "Invalid task ID",
     TASK_COMPLETED: "Task completed successfully",
+}
+
+export abstract class ParameterStore {
+    static readonly accessTokenSecret = process.env.JWT_ACCESS_SECRET || 'your-secret-key';
+    static readonly refreshTokenSecret = process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key';
 }
