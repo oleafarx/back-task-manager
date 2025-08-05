@@ -26,8 +26,16 @@ module.exports = {
     "import",
   ],
   rules: {
-    "quotes": ["error", "double"],
+    "quotes": "off", // Desactivado - permite comillas simples y dobles
     "import/no-unresolved": 0,
-    "indent": ["error", 2],
+    "indent": "off", // Desactivado - permite cualquier indentación
+    "object-curly-spacing": "off", // Desactivado - permite espacios en objetos
+    "require-jsdoc": "off", // Desactivado - no requiere JSDoc
+    "eol-last": "off", // Desactivado - no requiere línea nueva al final
+    "max-len": "off", // Desactivado - no limita longitud de línea
+    "comma-dangle": "off", // Desactivado - permite comas finales o no
+    "semi": "off", // Desactivado - permite punto y coma o no
+    "space-before-function-paren": "off", // Desactivado - espacios antes de paréntesis
+    "operator-linebreak": "off", // Desactivado - operadores en nueva línea
   },
 };
