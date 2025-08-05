@@ -18,7 +18,18 @@ export const createUserController = async (req: Request, res: Response) => {
         log('Received request to create user:', req.body);
         const { email } = req.body;
         const user = await createUserUseCase.execute(email);
-        return res.status(201).json(Message._201_CREATED(user));
+        const token = authService.generateTokenPair(user.id as string, email);
+        const response = {
+            user: {
+                id: user.id,
+                email: email
+            },
+            tokens: {
+                accessToken: token.accessToken,
+                refreshToken: token.refreshToken
+            }
+        }
+        return res.status(201).json(Message._201_CREATED(response));
     } catch (error) {
         const errorMessage = getErrorMessage(error);
         if (errorMessage.includes('already exists')) {
