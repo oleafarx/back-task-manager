@@ -5,7 +5,7 @@ import { GetUserUseCase } from '../../../../application/use-cases/users/get-user
 import { Message } from '../../../../utils/contants';
 import { getErrorMessage } from '../../../../utils/helpers';
 import { log } from 'firebase-functions/logger';
-import { AuthService } from '../../../../infrastructure/services/auth.services';
+import { AuthService } from '../../../../infrastructure/services/auth.service';
 import { User } from '../../../../domain/entities/user.entity';
 
 const repository = new UserRepository();

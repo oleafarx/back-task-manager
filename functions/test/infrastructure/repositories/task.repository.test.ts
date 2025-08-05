@@ -79,9 +79,10 @@ describe('TaskRepository', () => {
   describe('findAllByUserId', () => {
     it('should return all tasks for a user ordered by createdAt desc', async () => {
       const userId = 'user123';
+      const timestamp = { _seconds: 123, _nanoseconds: 456 };
       const mockDocs = [
-        { id: 'task1', data: () => ({ title: 'Task 1', userId }) },
-        { id: 'task2', data: () => ({ title: 'Task 2', userId }) }
+        { id: 'task1', data: () => ({ title: 'Task 1', userId, createdAt: timestamp, updatedAt: timestamp }) },
+        { id: 'task2', data: () => ({ title: 'Task 2', userId, createdAt: timestamp, updatedAt: timestamp }) }
       ];
       const mockSnapshot = { 
         size: 2, 

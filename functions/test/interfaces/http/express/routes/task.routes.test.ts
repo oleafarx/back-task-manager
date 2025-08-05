@@ -6,6 +6,7 @@ import {
     deleteTaskController,
     completeTaskController
 } from '@/interfaces/http/express/controllers/task.controller';
+import { authenticateToken } from '@/infrastructure/middleware/auth.middleware';
 
 jest.mock('express', () => ({
     Router: jest.fn(() => ({
@@ -14,6 +15,10 @@ jest.mock('express', () => ({
         put: jest.fn(),
         delete: jest.fn()
     }))
+}));
+
+jest.mock('@/infrastructure/middleware/auth.middleware', () => ({
+    authenticateToken: jest.fn()
 }));
 
 jest.mock('@/interfaces/http/express/controllers/task.controller', () => ({
@@ -44,11 +49,11 @@ describe('Task Routes', () => {
     it('should configure all routes correctly', () => {
         require('@/interfaces/http/express/routes/task.routes');
         
-        expect(mockRouter.post).toHaveBeenCalledWith('/', createTaskController);
-        expect(mockRouter.get).toHaveBeenCalledWith('/:userId', getTasksByUserController);
-        expect(mockRouter.put).toHaveBeenCalledWith('/:taskId', updateTaskController);
-        expect(mockRouter.delete).toHaveBeenCalledWith('/:taskId', deleteTaskController);
-        expect(mockRouter.post).toHaveBeenCalledWith('/:taskId/complete', completeTaskController);
+        expect(mockRouter.post).toHaveBeenCalledWith('/', authenticateToken, createTaskController);
+        expect(mockRouter.get).toHaveBeenCalledWith('/:userId', authenticateToken, getTasksByUserController);
+        expect(mockRouter.put).toHaveBeenCalledWith('/:taskId', authenticateToken, updateTaskController);
+        expect(mockRouter.delete).toHaveBeenCalledWith('/:taskId', authenticateToken, deleteTaskController);
+        expect(mockRouter.post).toHaveBeenCalledWith('/:taskId/complete', authenticateToken, completeTaskController);
     });
 
     it('should export the router instance', () => {

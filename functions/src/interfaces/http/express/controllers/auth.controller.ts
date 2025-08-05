@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AuthService } from '../../../../infrastructure/services/auth.services';
+import { AuthService } from '../../../../infrastructure/services/auth.service';
 import { Message } from '../../../../utils/contants';
 import { getErrorMessage } from '../../../../utils/helpers';
 import { log } from 'firebase-functions/logger';

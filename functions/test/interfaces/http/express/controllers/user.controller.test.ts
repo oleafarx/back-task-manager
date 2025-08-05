@@ -4,6 +4,7 @@ import { CreateUserUseCase } from '@/application/use-cases/users/create-user.use
 import { GetUserUseCase } from '@/application/use-cases/users/get-user.usecase';
 import { User } from '@/domain/entities/user.entity';
 import { Message } from '@/utils/contants';
+import { AuthService } from '@/infrastructure/services/auth.service';
 describe('User controller tests', () => {
 
     const mockRes = {
@@ -28,7 +29,7 @@ describe('User controller tests', () => {
         const spy1 = jest.spyOn(CreateUserUseCase.prototype, 'execute');
         const expectedUser = new User('correo@gmail.com');
         spy1.mockResolvedValue(expectedUser);
-
+        
         await createUserController(mockReq, mockRes);
         expect(spy1).toHaveBeenCalledTimes(1);
         expect(spy1).toHaveBeenCalledWith('correo@gmail.com');
@@ -46,28 +47,39 @@ describe('User controller tests', () => {
         expect(mockRes.status).toHaveBeenCalledWith(409);
         expect(mockRes.json).toHaveBeenCalledWith(Message._409_CONFLICT('User already exists'));
     });
-
+    
     it('should handle unexpected errors', async () => {
         const spy1 = jest.spyOn(CreateUserUseCase.prototype, 'execute');
         spy1.mockRejectedValue(new Error('Unexpected error'));
-
+        
         await createUserController(mockReq, mockRes);
         expect(spy1).toHaveBeenCalledTimes(1);
         expect(spy1).toHaveBeenCalledWith('correo@gmail.com');
         expect(mockRes.status).toHaveBeenCalledWith(500);
         expect(mockRes.json).toHaveBeenCalledWith(Message._500_INTERNAL_SERVER_ERROR('Unexpected error'));
     });
-
+    
     it('should get a user successfully', async () => {
         const spy1 = jest.spyOn(GetUserUseCase.prototype, 'execute');
+        const spy2 = jest.spyOn(AuthService.prototype, 'generateTokenPair');
         const expectedUser = new User('correo@gmail.com');
+        const expectedAuth = { accessToken: 'fake accessToken', refreshToken: 'fake refreshToken' };
         spy1.mockResolvedValue(expectedUser);
-
+        spy2.mockReturnValue(expectedAuth);
+        
+        const expected = {
+            user: {
+                email: expectedUser.email,
+                id: expectedUser.id,
+            },
+            tokens: expectedAuth
+        }
+        
         await getUserController(mockReq, mockRes);
         expect(spy1).toHaveBeenCalledTimes(1);
         expect(spy1).toHaveBeenCalledWith('correo@gmail.com');
         expect(mockRes.status).toHaveBeenCalledWith(200);
-        expect(mockRes.json).toHaveBeenCalledWith(Message._200_OPERATION_SUCCESSFUL(expectedUser));
+        expect(mockRes.json).toHaveBeenCalledWith(Message._200_OPERATION_SUCCESSFUL(expected));
     });
 
     it('should handle user not found error', async () => {

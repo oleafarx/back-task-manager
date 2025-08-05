@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { AuthService } from '../services/auth.services'
+import { AuthService } from '../services/auth.service'
 import { Message } from '../../utils/contants'
 import { log } from 'firebase-functions/logger'
 
