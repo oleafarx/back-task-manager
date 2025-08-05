@@ -37,5 +37,18 @@ module.exports = {
     "semi": "off", // Desactivado - permite punto y coma o no
     "space-before-function-paren": "off", // Desactivado - espacios antes de paréntesis
     "operator-linebreak": "off", // Desactivado - operadores en nueva línea
+    "@typescript-eslint/no-inferrable-types": "off", // Permite anotaciones de tipo explícitas
+    "no-trailing-spaces": "off", // Permite espacios al final de líneas
+    "@typescript-eslint/no-namespace": "off", // Permite namespaces
+    "arrow-parens": "off", // No requiere paréntesis en arrow functions
+    "@typescript-eslint/no-extra-semi": "off", // Permite punto y coma innecesarios
+    "padded-blocks": "off", // Permite bloques con líneas en blanco
+    "new-cap": "off", // Permite funciones con mayúscula sin new
+    "@typescript-eslint/no-var-requires": "off", // Permite require() en lugar de import
+    "@typescript-eslint/no-explicit-any": "off", // Permite uso de 'any'
+    "@typescript-eslint/no-empty-function": "off", // Permite funciones vacías
+    "@typescript-eslint/no-unused-vars": "off", // Permite variables no usadas
+    "brace-style": "off", // Permite diferentes estilos de llaves
+    "block-spacing": "off", // Permite espacios en bloques
   },
 };
