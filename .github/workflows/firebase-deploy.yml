@@ -30,6 +30,12 @@ jobs:
         run: |
           cd functions
           npm run build
+          
+      - name: Delete existing function (downgrade from v2 to v1)
+        run: firebase functions:delete api --region us-central1 --force
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        continue-on-error: true
 
       - name: Deploy to Firebase
         run: firebase deploy --only functions
