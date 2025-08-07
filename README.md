@@ -63,7 +63,9 @@ The `User` entity represents system users with minimal required information, fol
 | id         | string? | Unique identifier             | readonly   |
 | email      | string  | User email address            | mutable    |
 | createdAt  | Date    | Account creation timestamp    | readonly   |
+
 The `User` class constructor defaults `createdAt` to the current date when not provided
+
 #### Token Entity
 The token-related entities define the structure for JWT authentication tokens used throughout the system. These consist of two interfaces: `TokenPayload` for the token contents and `TokenPair` for token distribution.
 
@@ -80,8 +82,10 @@ The token-related entities define the structure for JWT authentication tokens us
 |--------------|--------|-----------------------------|
 | accessToken  | string | Short-lived access token    |
 | refreshToken | string | Long-lived refresh token    |
+
 #### Entity Relationships
 <img width="486" height="403" alt="image" src="https://github.com/user-attachments/assets/f3d7fa15-d08e-4a02-9733-4c5913009b1f" />
+
 ### Request Processing Flow
 Requests flow through the system following clean architecture principles, with each layer handling specific concerns:
 <img width="1047" height="554" alt="image" src="https://github.com/user-attachments/assets/74d255c5-34c3-4a6d-864b-3a5010082d60" />
