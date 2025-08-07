@@ -1,5 +1,4 @@
 # back-task-manager
-# back-task-manager
 This document provides a comprehensive overview of the task-manager repository, a Firebase Cloud Functions-based task management system implementing clean architecture principles. The system provides REST API endpoints for managing tasks and users with JWT-based authentication, all deployed as serverless functions on Google Firebase.
 
 ## Overview
